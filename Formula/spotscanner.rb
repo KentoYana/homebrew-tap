@@ -1,8 +1,8 @@
 class Spotscanner < Formula
   desc "Quantitative analysis of fungal spot-test plates"
   homepage "https://github.com/KentoYana/spotscanner"
-  url "https://github.com/KentoYana/spotscanner/releases/download/v8.0.0/spotscanner-8.0.0.tar.gz"
-  sha256 "6b0efadebe5463dcde6f214b32f1cbd1aeecc1fef5da69bd6267050775c7c25c"
+  url "https://github.com/KentoYana/spotscanner/releases/download/v8.0.1/spotscanner-8.0.1.tar.gz"
+  sha256 "14a38895dd6451a573dcbb74090edf18a944b4ab46d523dc6684832d58204fde"
   license "MIT"
 
   depends_on "python-setuptools" => :build
