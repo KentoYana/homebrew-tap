@@ -1,7 +1,7 @@
 class CodexNotify < Formula
   desc "Play local macOS sounds for Codex approvals and completed turns"
-  homepage "https://github.com/KentoYana/codex-push-notification"
-  url "https://github.com/KentoYana/codex-push-notification/releases/download/v0.2.1/codex-notify-0.2.1.tar.gz"
+  homepage "https://github.com/KentoYana/codex-notify"
+  url "https://github.com/KentoYana/codex-notify/releases/download/v0.2.1/codex-notify-0.2.1.tar.gz"
   sha256 "3678576fff70dc370617875a85baebf8222f9f0281dc54688ba3832f45e1b7a5"
   license "MIT"
 
