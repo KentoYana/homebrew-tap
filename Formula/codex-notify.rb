@@ -1,8 +1,8 @@
 class CodexNotify < Formula
   desc "Play local macOS sounds for Codex approvals and completed turns"
   homepage "https://github.com/KentoYana/codex-push-notification"
-  url "https://github.com/KentoYana/codex-push-notification/releases/download/v0.1.0/codex-notify-0.1.0.tar.gz"
-  sha256 "9b85ffe20bec27a52ba38cffa34bdc5f3d0d0c7961e4f3d94d2ef9bf988b97a5"
+  url "https://github.com/KentoYana/codex-push-notification/releases/download/v0.2.0/codex-notify-0.2.0.tar.gz"
+  sha256 "3149d2acbc317b4d8c405d12c2bc22c1cbff3eb5bdc0ec2e454ed3dbd679b10e"
   license "MIT"
 
   depends_on :macos
@@ -23,6 +23,6 @@ class CodexNotify < Formula
   end
 
   test do
-    assert_match "codex-notify 0.1.0", shell_output("#{bin}/codex-notify --version")
+    assert_match "codex-notify 0.2.0", shell_output("#{bin}/codex-notify --version")
   end
 end
