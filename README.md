@@ -15,6 +15,19 @@ brew services start codex-notify
 See [KentoYana/codex-notify](https://github.com/KentoYana/codex-notify)
 for configuration and troubleshooting.
 
+## BibCollect
+
+Collect exported `.bib`, `.bibtex`, and `.ris` files into a single
+`today.bib`, while organizing associated PDF files:
+
+```bash
+brew install KentoYana/tap/bibcollect
+bibcollect --path ~/Downloads/citations
+```
+
+See [KentoYana/BibCollect](https://github.com/KentoYana/BibCollect) for usage
+and release notes.
+
 ## SpotScanner
 
 Install SpotScanner with the fully qualified formula name:
