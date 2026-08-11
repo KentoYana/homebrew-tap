@@ -12,7 +12,7 @@ codex-notify install
 brew services start codex-notify
 ```
 
-See [KentoYana/codex-push-notification](https://github.com/KentoYana/codex-push-notification)
+See [KentoYana/codex-notify](https://github.com/KentoYana/codex-notify)
 for configuration and troubleshooting.
 
 ## SpotScanner
