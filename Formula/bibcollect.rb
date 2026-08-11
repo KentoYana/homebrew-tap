@@ -4,9 +4,13 @@ class Bibcollect < Formula
   url "https://github.com/KentoYana/BibCollect/releases/download/v1.1.1/bibcollect-1.1.1.tar.gz"
   sha256 "a4f8919518cda0871358f6defdca99e28ea762bdd1365276ec2560e8ceba4a63"
   license "MIT"
+  revision 1
 
   depends_on "bibutils"
-  depends_on "zsh"
+
+  on_linux do
+    depends_on "zsh"
+  end
 
   def install
     bin.install "bibcollect"
