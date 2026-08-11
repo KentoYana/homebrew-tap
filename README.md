@@ -2,6 +2,19 @@
 
 Homebrew formulae maintained by Kento Yanagisawa.
 
+## codex-notify
+
+Play local macOS sounds when Codex requests approval or completes a turn:
+
+```bash
+brew install KentoYana/tap/codex-notify
+codex-notify install
+brew services start codex-notify
+```
+
+See [KentoYana/codex-push-notification](https://github.com/KentoYana/codex-push-notification)
+for configuration and troubleshooting.
+
 ## SpotScanner
 
 Install SpotScanner with the fully qualified formula name:
