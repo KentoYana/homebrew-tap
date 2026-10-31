@@ -30,7 +30,7 @@ and release notes.
 
 ## SpotScanner
 
-Install SpotScanner with the fully qualified formula name:
+Install SpotScanner 8.0.2 with the fully qualified formula name:
 
 ```bash
 brew install KentoYana/tap/spotscanner
@@ -49,7 +49,7 @@ modify the user's system Python, pyenv installations, or global pip packages.
 
 ### SpotScanner dependency policy and verification
 
-SpotScanner 8.0.1 revision 1 uses Python 3.15, matching the current Homebrew
+SpotScanner 8.0.2 uses Python 3.15, matching the current Homebrew
 OpenCV bindings. Its virtual environment shares Homebrew's NumPy and OpenCV.
 The upstream pip package retains its exact NumPy and `opencv-python-headless`
 pins for reproducibility; the Formula deliberately installs the package with
@@ -57,8 +57,7 @@ pins for reproducibility; the Formula deliberately installs the package with
 runtimes are validated separately. A pip dependency-version assertion or
 `pip check` against the upstream metadata is not a Homebrew compatibility test.
 
-For an existing installation, after this change reaches the tap's default
-branch:
+Update and verify an existing installation:
 
 ```bash
 brew update
@@ -66,9 +65,11 @@ brew upgrade KentoYana/tap/spotscanner
 brew test KentoYana/tap/spotscanner
 ```
 
-The Formula revision makes the fix upgradeable without changing the upstream
-8.0.1 release. `spotscanner --version` therefore continues to show 8.0.1;
-`brew list --versions spotscanner` shows the packaging revision as `8.0.1_1`.
+The Python compatibility fix first shipped as SpotScanner `8.0.1_1`
+(8.0.1 revision 1). Release 8.0.2 retains that fix and the same analysis tests.
+`spotscanner --version` reports `8.0.2`, and
+`brew list --versions spotscanner` includes `8.0.2`. The newer upstream version
+upgrades existing `8.0.1_1` installations.
 
 The [SpotScanner Homebrew workflow](.github/workflows/spotscanner.yml) runs on
 macOS for Formula or workflow changes, every January 1 and July 1 at
