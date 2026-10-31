@@ -1,0 +1,114 @@
+name: SpotScanner Homebrew
+
+on:
+  push:
+    paths:
+      - Formula/spotscanner.rb
+      - .github/workflows/spotscanner.yml
+  pull_request:
+    paths:
+      - Formula/spotscanner.rb
+      - .github/workflows/spotscanner.yml
+  schedule:
+    # Monday 03:23 UTC / 12:23 JST; test upstream dependency updates too.
+    - cron: "23 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: spotscanner-homebrew-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  install-and-analyze:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
+      HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: "1"
+      SPOTSCANNER_FORMULA: kentoyana/tap/spotscanner
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Refresh Homebrew metadata
+        run: |
+          mkdir -p reports
+          brew update 2>&1 | tee reports/brew-update.log
+          brew config > reports/brew-config.txt
+
+      - name: Register and verify this checkout as the tap
+        run: |
+          brew tap --custom-remote KentoYana/tap "$GITHUB_WORKSPACE"
+          tap_path="$(brew --repository KentoYana/tap)"
+          test "$(git -C "$tap_path" rev-parse HEAD)" = "$(git rev-parse HEAD)"
+          cmp Formula/spotscanner.rb "$tap_path/Formula/spotscanner.rb"
+          git rev-parse HEAD > reports/tap-commit.txt
+          brew trust --formula "$SPOTSCANNER_FORMULA"
+
+      - name: Check the Python dependency against current OpenCV
+        run: |
+          brew info --json=v2 "$SPOTSCANNER_FORMULA" opencv numpy python-setuptools > reports/formulae.json
+          ruby <<'RUBY'
+          require "json"
+          formulae = JSON.parse(File.read("reports/formulae.json")).fetch("formulae")
+          spot = formulae.find { |formula| formula.fetch("name") == "spotscanner" }
+          opencv = formulae.find { |formula| formula.fetch("name") == "opencv" }
+          spot_python = spot.fetch("dependencies").grep(/^python@/)
+          opencv_python = opencv.fetch("dependencies").grep(/^python@/)
+          unless spot_python.length == 1 && spot_python == opencv_python
+            abort "Python dependency mismatch: SpotScanner=#{spot_python.inspect}, OpenCV=#{opencv_python.inspect}. Update the Formula dependency, venv interpreter, and revision together."
+          end
+          File.open(ENV.fetch("GITHUB_ENV"), "a") do |file|
+            file.puts "SPOTSCANNER_PYTHON=#{spot_python.fetch(0)}"
+          end
+          RUBY
+
+      - name: Install current dependencies and the checked-out Formula
+        run: |
+          brew install numpy opencv python-setuptools "$SPOTSCANNER_PYTHON" 2>&1 | tee reports/dependencies-install.log
+          brew install --verbose "$SPOTSCANNER_FORMULA" 2>&1 | tee reports/spotscanner-install.log
+          brew list --versions > reports/installed-versions.txt
+
+      - name: Record and import the installed runtime
+        run: |
+          runtime_python="$(brew --prefix "$SPOTSCANNER_FORMULA")/libexec/bin/python"
+          "$runtime_python" -I - <<'PYTHON' | tee reports/runtime.json
+          import json
+          import platform
+          import sys
+          import cv2
+          import numpy
+          import spotscanner
+
+          print(json.dumps({
+              "python": sys.version,
+              "executable": sys.executable,
+              "platform": platform.platform(),
+              "numpy": numpy.__version__,
+              "numpy_path": numpy.__file__,
+              "opencv": cv2.__version__,
+              "opencv_path": cv2.__file__,
+              "spotscanner": spotscanner.__version__,
+              "spotscanner_path": spotscanner.__file__,
+          }, indent=2))
+          PYTHON
+
+      - name: Analyze synthetic pipette and replicator images
+        run: brew test --verbose "$SPOTSCANNER_FORMULA" 2>&1 | tee reports/brew-test.log
+
+      - name: Save installation and test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spotscanner-homebrew-${{ github.run_id }}-${{ github.run_attempt }}
+          path: reports/
+          if-no-files-found: warn
+          retention-days: 30
