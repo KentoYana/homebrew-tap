@@ -71,8 +71,8 @@ The Formula revision makes the fix upgradeable without changing the upstream
 `brew list --versions spotscanner` shows the packaging revision as `8.0.1_1`.
 
 The [SpotScanner Homebrew workflow](.github/workflows/spotscanner.yml) runs on
-macOS for Formula or workflow changes, every Monday at 03:23 UTC (12:23 JST),
-and through **Actions → SpotScanner Homebrew → Run workflow**. It refreshes
+macOS for Formula or workflow changes, every January 1 and July 1 at
+03:23 UTC (12:23 JST), and through **Actions → SpotScanner Homebrew → Run workflow**. It refreshes
 Homebrew metadata, registers and verifies the exact checked-out tap commit,
 checks that OpenCV and SpotScanner declare the same Python minor version,
 installs current dependencies and the Formula, imports the installed runtime,
@@ -80,8 +80,7 @@ and runs `brew test` for both analysis modes. The test checks generated images,
 CSV structure, coordinates, and numerical results. Runtime versions, paths,
 and installation/test logs are retained as workflow artifacts for 30 days.
 
-Scheduled runs use the default branch, so the workflow must be merged there
-before the weekly check becomes active. The workflow uses targeted dependency
+Scheduled runs use the default branch. The workflow uses targeted dependency
 installation, without a global `brew upgrade` or cleanup. It supplements the
 application repository's pip CI; synthetic tests do not replace the real-image
 regression procedure documented in the application repository.
