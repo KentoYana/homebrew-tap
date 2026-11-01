@@ -1,0 +1,93 @@
+name: BibDesk RAG Homebrew
+
+on:
+  push:
+    paths:
+      - Formula/bibdesk-rag.rb
+      - .github/workflows/bibdesk-rag.yml
+  pull_request:
+    paths:
+      - Formula/bibdesk-rag.rb
+      - .github/workflows/bibdesk-rag.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bibdesk-rag-homebrew-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  install-and-search:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
+      HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: "1"
+      BIBDESK_RAG_FORMULA: kentoyana/tap/bibdesk-rag
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Refresh Homebrew metadata
+        run: |
+          mkdir -p reports
+          brew update 2>&1 | tee reports/brew-update.log
+          brew config > reports/brew-config.txt
+
+      - name: Register and verify this checkout as the tap
+        run: |
+          brew tap --custom-remote KentoYana/tap "$GITHUB_WORKSPACE"
+          tap_path="$(brew --repository KentoYana/tap)"
+          test "$(git -C "$tap_path" rev-parse HEAD)" = "$(git rev-parse HEAD)"
+          cmp Formula/bibdesk-rag.rb "$tap_path/Formula/bibdesk-rag.rb"
+          git rev-parse HEAD > reports/tap-commit.txt
+          brew trust --formula "$BIBDESK_RAG_FORMULA"
+
+      - name: Check the Formula
+        run: |
+          brew style "$BIBDESK_RAG_FORMULA" 2>&1 | tee reports/brew-style.log
+          brew audit --strict "$BIBDESK_RAG_FORMULA" 2>&1 | tee reports/brew-audit.log
+
+      - name: Install the checked-out Formula from source
+        run: |
+          brew install --build-from-source --verbose "$BIBDESK_RAG_FORMULA" 2>&1 | tee reports/brew-install.log
+          brew info --json=v2 "$BIBDESK_RAG_FORMULA" > reports/formula.json
+          brew list --versions > reports/installed-versions.txt
+
+      - name: Record the installed runtime and check dependencies
+        run: |
+          runtime_python="$(brew --prefix "$BIBDESK_RAG_FORMULA")/libexec/bin/python"
+          "$runtime_python" -m pip --no-cache-dir check 2>&1 | tee reports/pip-check.log
+          "$runtime_python" -I - <<'PYTHON' | tee reports/runtime.json
+          import json
+          import platform
+          import sys
+          import bibdesk_rag
+
+          print(json.dumps({
+              "python": sys.version,
+              "executable": sys.executable,
+              "platform": platform.platform(),
+              "bibdesk_rag": bibdesk_rag.__version__,
+              "package_path": bibdesk_rag.__file__,
+          }, indent=2))
+          PYTHON
+
+      - name: Search synthetic PDFs and CSV through CLI and MCP
+        run: brew test --verbose "$BIBDESK_RAG_FORMULA" 2>&1 | tee reports/brew-test.log
+
+      - name: Save installation and test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bibdesk-rag-homebrew-${{ github.run_id }}-${{ github.run_attempt }}
+          path: reports/
+          if-no-files-found: warn
+          retention-days: 30

@@ -90,3 +90,34 @@ When Homebrew changes OpenCV's Python minor version, review the failure and
 update the Formula's Python dependency and venv interpreter together, increment
 the Formula revision, and rerun both `brew test` and real-image regression.
 Do not loosen pip pins or numerical expectations merely to make CI pass.
+
+## BibDesk RAG
+
+Search a BibDesk library, PDFs and supplementary files from Codex using a local,
+read-only MCP server:
+
+```bash
+brew install KentoYana/tap/bibdesk-rag
+```
+
+Follow the [BibDesk RAG setup guide](https://github.com/KentoYana/BibDeskRAG#homebrewで導入してcodexから使う)
+to register your own `.bib`, build its local index, and connect Codex to
+`bibdesk-rag-mcp`. The Formula uses Homebrew-managed Python in its own environment;
+users do not need to configure pyenv or global pip. Original libraries and linked
+files remain read-only. Configuration and indexes are stored outside the Cellar
+and are retained during upgrades and uninstall.
+
+Update and verify an existing installation:
+
+```bash
+brew update
+brew upgrade KentoYana/tap/bibdesk-rag
+brew test KentoYana/tap/bibdesk-rag
+```
+
+The [BibDesk RAG Homebrew workflow](.github/workflows/bibdesk-rag.yml) runs on macOS
+when its Formula or workflow changes, and through **Actions → BibDesk RAG Homebrew
+→ Run workflow**. It registers and verifies the checked-out tap commit, checks
+the Formula, installs from source, and runs CLI/MCP retrieval tests using generated
+PDF and CSV fixtures. Tests verify source preservation and PDF page citations;
+they do not require a personal library. Logs are retained for 30 days.
