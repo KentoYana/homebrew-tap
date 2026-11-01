@@ -3,8 +3,8 @@ class BibdeskRag < Formula
 
   desc "Read-only local literature retrieval for BibDesk libraries"
   homepage "https://github.com/KentoYana/BibDeskRAG"
-  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.1.0/bibdesk_rag-0.1.0.tar.gz"
-  sha256 "4f25fc185347df6165ef3bd824203ab35a344e35a659cfbb85ca3be0a5d82e16"
+  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.1.1/bibdesk_rag-0.1.1.tar.gz"
+  sha256 "83a23a3e61593b17a694cdb5885fa137698e3af21e9b6afb85e06d634451ff71"
   license "MIT"
 
   depends_on "pkgconf" => :build
@@ -14,7 +14,7 @@ class BibdeskRag < Formula
   depends_on "python@3.14"
 
   resource "build-wheels" do
-    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.1.0/bibdesk-rag-build-wheels.tar.gz"
+    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.1.1/bibdesk-rag-build-wheels.tar.gz"
     sha256 "5a4126a9d5bedf696db851154cb8923952aab654e805e69687ca14bd4be6b292"
   end
 
@@ -191,16 +191,20 @@ class BibdeskRag < Formula
   def caveats
     <<~EOS
       Register your own BibDesk library and build its read-only search index:
-        bibdesk-rag init --bib "/absolute/path/to/references.bib"
-        bibdesk-rag index
-        bibdesk-rag doctor --json
+        bibdesk_rag_config="$HOME/.config/bibdesk-rag/config.toml"
+        bibdesk-rag --config "$bibdesk_rag_config" init --bib "/absolute/path/to/references.bib" --data-dir "$HOME/.local/share/bibdesk-rag"
+        bibdesk-rag --config "$bibdesk_rag_config" index
+        bibdesk-rag --config "$bibdesk_rag_config" status --json
+
+      Index/update show terminal progress. Use --json for a full report,
+      --verbose for all diagnostics, or --no-progress to hide the bar.
 
       For command-line setup, check whether the optional Codex CLI is installed:
         codex --version
       If the command is missing, install it first:
         brew install --cask codex
-      Then register the local MCP server with the default configuration:
-        codex mcp add bibdesk-rag -- #{opt_bin}/bibdesk-rag-mcp --config "$HOME/Library/Application Support/bibdesk-rag/config.toml"
+      Then register the local MCP server with the configuration above:
+        codex mcp add bibdesk-rag -- #{opt_bin}/bibdesk-rag-mcp --config "$HOME/.config/bibdesk-rag/config.toml"
       Restart Codex and ask it to use bibdesk-rag in a new chat.
       Setup without the CLI and custom configuration paths:
         https://github.com/KentoYana/BibDeskRAG/blob/main/docs/codex.md
@@ -210,7 +214,8 @@ class BibdeskRag < Formula
       Then close active Codex/MCP sessions and uninstall BibDesk RAG:
         brew uninstall KentoYana/tap/bibdesk-rag
 
-      Settings and indexes stay in ~/Library/Application Support/bibdesk-rag/.
+      This setup stores config in ~/.config/bibdesk-rag/ and the index in
+      ~/.local/share/bibdesk-rag/. Existing custom locations are unchanged.
       Upgrades and uninstall do not remove them or modify your BibDesk originals.
       Optional data removal and removal without the Codex CLI:
         https://github.com/KentoYana/BibDeskRAG#アンインストール
