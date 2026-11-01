@@ -64,7 +64,10 @@ jobs:
       - name: Record the installed runtime and check dependencies
         run: |
           runtime_python="$(brew --prefix "$BIBDESK_RAG_FORMULA")/libexec/bin/python"
-          "$runtime_python" -m pip --no-cache-dir check 2>&1 | tee reports/pip-check.log
+          # Homebrew creates runtime virtualenvs without pip. Inspect that exact
+          # interpreter using Homebrew Python's pip; install nothing into it.
+          brew_python="$(brew --prefix python@3.14)/bin/python3.14"
+          "$brew_python" -m pip --python "$runtime_python" --no-cache-dir check 2>&1 | tee reports/pip-check.log
           "$runtime_python" -I - <<'PYTHON' | tee reports/runtime.json
           import json
           import platform
