@@ -100,6 +100,17 @@ read-only MCP server:
 brew install KentoYana/tap/bibdesk-rag
 ```
 
+Codex CLI is optional. For command-line registration, check `codex --version`.
+If the command is missing, install the CLI first:
+
+```bash
+brew install --cask codex
+codex --version
+```
+
+You can also register the MCP server through the app settings without installing
+the CLI; see the [Codex connection guide](https://github.com/KentoYana/BibDeskRAG/blob/main/docs/codex.md).
+
 Follow the [BibDesk RAG setup guide](https://github.com/KentoYana/BibDeskRAG#homebrewで導入してcodexから使う)
 to register your own `.bib`, build its local index, and connect Codex to
 `bibdesk-rag-mcp`. The Formula uses Homebrew-managed Python in its own environment;
@@ -114,6 +125,20 @@ brew update
 brew upgrade KentoYana/tap/bibdesk-rag
 brew test KentoYana/tap/bibdesk-rag
 ```
+
+To stop using BibDesk RAG, remove its MCP registration with
+`codex mcp remove bibdesk-rag` or through the app settings, close active Codex/MCP
+sessions, then run:
+
+```bash
+brew uninstall KentoYana/tap/bibdesk-rag
+```
+
+This removes the application and its dedicated Python environment. Your BibDesk
+originals, configuration and search index remain. See the
+[removal guide](https://github.com/KentoYana/BibDeskRAG#アンインストール)
+for optional removal of derived data and of a Codex CLI installed only for this
+tool. Keep the shared tap and other packages if you still use them.
 
 The [BibDesk RAG Homebrew workflow](.github/workflows/bibdesk-rag.yml) runs on macOS
 when its Formula or workflow changes, and through **Actions → BibDesk RAG Homebrew
