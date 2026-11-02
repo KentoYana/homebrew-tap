@@ -98,31 +98,36 @@ read-only MCP server:
 
 ```bash
 brew install KentoYana/tap/bibdesk-rag
+bibdesk-rag setup
 ```
 
-Codex CLI is optional. For command-line registration, check `codex --version`.
-If the command is missing, install the CLI first:
+BibDesk RAG 0.2.0 adds interactive setup: select your `.bib`, create or reuse its
+search index, and optionally register the local MCP server in Codex. Existing
+configuration is preserved and existing indexes are reused by default. For a
+custom configuration location, run:
 
 ```bash
-brew install --cask codex
-codex --version
+bibdesk-rag --config "/absolute/path/to/config.toml" setup
 ```
 
-You can also register the MCP server through the app settings without installing
-the CLI; see the [Codex connection guide](https://github.com/KentoYana/BibDeskRAG/blob/main/docs/codex.md).
+Codex CLI is optional. Setup asks for confirmation before registration and shows
+manual app connection details if the CLI is unavailable or registration is
+skipped. See the [Codex connection guide](https://github.com/KentoYana/BibDeskRAG/blob/main/docs/codex.md)
+for manual registration and connection diagnostics.
 
 Follow the [BibDesk RAG setup guide](https://github.com/KentoYana/BibDeskRAG#homebrewで導入してcodexから使う)
-to register your own `.bib`, build its local index, and connect Codex to
-`bibdesk-rag-mcp`. The Formula uses Homebrew-managed Python in its own environment;
-users do not need to configure pyenv or global pip. Original libraries and linked
-files remain read-only. Configuration and indexes are stored outside the Cellar
-and are retained during upgrades and uninstall.
+for the full setup and manual CLI procedures. The Formula uses Homebrew-managed
+Python in its own environment; users do not need to configure pyenv or global
+pip. Original libraries and linked files remain read-only. Configuration and
+indexes are stored outside the Cellar and are retained during upgrades and
+uninstall.
 
-Update and verify an existing installation:
+Update an existing installation:
 
 ```bash
 brew update
 brew upgrade KentoYana/tap/bibdesk-rag
+bibdesk-rag --version
 brew test KentoYana/tap/bibdesk-rag
 ```
 
