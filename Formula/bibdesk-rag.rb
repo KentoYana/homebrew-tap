@@ -3,8 +3,8 @@ class BibdeskRag < Formula
 
   desc "Read-only local literature retrieval for BibDesk libraries"
   homepage "https://github.com/KentoYana/BibDeskRAG"
-  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.2.0/bibdesk_rag-0.2.0.tar.gz"
-  sha256 "a3b19be103f7b989716a448d29245f5eec59dada87788bcfcd4d6c61e776828b"
+  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.3.0/bibdesk_rag-0.3.0.tar.gz"
+  sha256 "852ada110c6f173d87ba851da4969124bb3bc84882f391e9cc36ea22fd346bf3"
   license "MIT"
 
   depends_on "pkgconf" => :build
@@ -14,7 +14,7 @@ class BibdeskRag < Formula
   depends_on "python@3.14"
 
   resource "build-wheels" do
-    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.2.0/bibdesk-rag-build-wheels.tar.gz"
+    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.3.0/bibdesk-rag-build-wheels.tar.gz"
     sha256 "5a4126a9d5bedf696db851154cb8923952aab654e805e69687ca14bd4be6b292"
   end
 
@@ -191,16 +191,17 @@ class BibdeskRag < Formula
   def caveats
     <<~EOS
       Start the interactive setup in a terminal:
-        bibdesk-rag setup
+        bibdesk-rag --setup
 
       For an existing configuration in a custom location:
-        bibdesk-rag --config "/absolute/path/to/config.toml" setup
+        bibdesk-rag --config use "/absolute/path/to/config.toml"
+        bibdesk-rag --setup
 
       Setup registers your library, offers indexing, and checks the local MCP server.
       Existing configuration and indexes are retained unless you explicitly choose
       an index update or rebuild. Your BibDesk originals remain read-only.
 
-      Index/update show terminal progress. Use --json for a full report,
+      --index update/rebuild show terminal progress. Use --format json for a full report,
       --verbose for all diagnostics, or --no-progress to hide the bar.
 
       Codex CLI is optional: setup asks before registering the MCP server and shows
@@ -216,8 +217,8 @@ class BibdeskRag < Formula
       Then close active Codex/MCP sessions and uninstall BibDesk RAG:
         brew uninstall KentoYana/tap/bibdesk-rag
 
-      Without path options or environment overrides, macOS setup stores config and
-      the index in ~/Library/Application Support/bibdesk-rag/.
+      Default configuration: ~/.config/bibdesk-rag/config.toml
+      Default index: ~/.local/share/bibdesk-rag/index.sqlite3
       Existing custom locations are unchanged.
       Upgrades and uninstall do not remove them or modify your BibDesk originals.
       Optional data removal and removal without the Codex CLI:
