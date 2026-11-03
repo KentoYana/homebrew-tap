@@ -3,8 +3,8 @@ class BibdeskRag < Formula
 
   desc "Read-only local literature retrieval for BibDesk libraries"
   homepage "https://github.com/KentoYana/BibDeskRAG"
-  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.3.0/bibdesk_rag-0.3.0.tar.gz"
-  sha256 "852ada110c6f173d87ba851da4969124bb3bc84882f391e9cc36ea22fd346bf3"
+  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.3.1/bibdesk_rag-0.3.1.tar.gz"
+  sha256 "3ed048e89d18178a1de608e22a04d717059872cf49835a00bfd582c659674bca"
   license "MIT"
 
   depends_on "pkgconf" => :build
@@ -14,7 +14,7 @@ class BibdeskRag < Formula
   depends_on "python@3.14"
 
   resource "build-wheels" do
-    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.3.0/bibdesk-rag-build-wheels.tar.gz"
+    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.3.1/bibdesk-rag-build-wheels.tar.gz"
     sha256 "5a4126a9d5bedf696db851154cb8923952aab654e805e69687ca14bd4be6b292"
   end
 
@@ -206,6 +206,8 @@ class BibdeskRag < Formula
 
       Codex CLI is optional: setup asks before registering the MCP server and shows
       manual app connection details if the CLI is unavailable or registration is skipped.
+      Normal registration uses no arguments and follows the selected configuration.
+      Only --temp PATH --setup pins a configuration in the registration.
       The MCP executable for manual connection is:
         #{opt_bin}/bibdesk-rag-mcp
       Restart Codex and ask it to use bibdesk-rag in a new chat.
