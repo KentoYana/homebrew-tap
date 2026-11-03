@@ -1,0 +1,35 @@
+name: LiteratureDigest Homebrew
+on:
+  push:
+    paths: ['Formula/literature-digest.rb', '.github/workflows/literature-digest.yml']
+  pull_request:
+    paths: ['Formula/literature-digest.rb', '.github/workflows/literature-digest.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  install:
+    runs-on: macos-15
+    timeout-minutes: 45
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      HOMEBREW_NO_INSTALL_CLEANUP: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Register this exact Tap checkout
+        shell: bash
+        run: |
+          brew update
+          brew tap --custom-remote KentoYana/tap "$GITHUB_WORKSPACE"
+          tap_path="$(brew --repository KentoYana/tap)"
+          test "$(git -C "$tap_path" rev-parse HEAD)" = "$(git rev-parse HEAD)"
+          cmp Formula/literature-digest.rb "$tap_path/Formula/literature-digest.rb"
+      - name: Audit and install published source archive
+        run: |
+          ruby -c Formula/literature-digest.rb
+          brew audit KentoYana/tap/literature-digest
+          brew install --build-from-source KentoYana/tap/literature-digest
+          brew test KentoYana/tap/literature-digest
+          literature-digest --version
+          literature-digest --home "$RUNNER_TEMP/ld-user" init
+          literature-digest --home "$RUNNER_TEMP/ld-user" doctor --offline

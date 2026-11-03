@@ -151,3 +151,32 @@ when its Formula or workflow changes, and through **Actions → BibDesk RAG Home
 the Formula, installs from source, and runs CLI/MCP retrieval tests using generated
 PDF and CSV fixtures. Tests verify source preservation and PDF page citations;
 they do not require a personal library. Logs are retained for 30 days.
+
+## LiteratureDigest
+
+Collect scientific RSS/Atom entries, edit them into concise Japanese articles with
+Sarashina, and serve a local RSS feed for NetNewsWire:
+
+```sh
+brew install KentoYana/tap/literature-digest
+literature-digest init
+```
+
+Register feeds and an API key using the [Japanese setup guide](https://github.com/KentoYana/LiteratureDigest#readme).
+Installation does not start background processes. Homebrew manages an isolated
+Python environment; configuration, SQLite articles, logs and Keychain credentials
+remain outside the Cellar during upgrades and uninstall.
+
+```sh
+brew upgrade KentoYana/tap/literature-digest
+brew test KentoYana/tap/literature-digest
+# Before uninstalling:
+literature-digest service uninstall
+brew uninstall KentoYana/tap/literature-digest
+```
+
+The [LiteratureDigest Homebrew workflow](.github/workflows/literature-digest.yml)
+checks the exact Tap commit on macOS, audits and installs the published source
+archive, and tests the CLI and bundled templates without an API key.
+The Formula is generated from the application's checksummed release using
+`scripts/render_formula.py`; see the [release procedure](https://github.com/KentoYana/LiteratureDigest/blob/main/docs/RELEASING.md).
