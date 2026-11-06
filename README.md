@@ -98,16 +98,19 @@ read-only MCP server:
 
 ```bash
 brew install KentoYana/tap/bibdesk-rag
-bibdesk-rag setup
+bibdesk-rag --setup
 ```
 
-BibDesk RAG 0.2.0 adds interactive setup: select your `.bib`, create or reuse its
-search index, and optionally register the local MCP server in Codex. Existing
-configuration is preserved and existing indexes are reused by default. For a
-custom configuration location, run:
+BibDesk RAG 0.4.0 includes local multilingual title/abstract semantic retrieval.
+Interactive setup selects your `.bib`, offers semantic retrieval and explicit
+model acquisition, creates or reuses the shared SQLite index, and optionally
+registers the local MCP server in Codex. Keyword retrieval remains the default.
+Existing configuration and index data are retained. For a custom configuration
+location, select it before setup:
 
 ```bash
-bibdesk-rag --config "/absolute/path/to/config.toml" setup
+bibdesk-rag --config use "/absolute/path/to/config.toml"
+bibdesk-rag --setup
 ```
 
 Codex CLI is optional. Setup asks for confirmation before registration and shows
@@ -122,6 +125,23 @@ pip. Original libraries and linked files remain read-only. Configuration and
 indexes are stored outside the Cellar and are retained during upgrades and
 uninstall.
 
+Apple Silicon includes checksum-locked inference dependencies in that same
+environment. Model weights are not bundled; after explicit initial acquisition,
+indexing and retrieval work offline. Pip users can choose the optional semantic
+extra. See the [semantic search guide](https://github.com/KentoYana/BibDeskRAG/blob/main/docs/semantic-search.md).
+
+```bash
+bibdesk-rag --index update
+bibdesk-rag --index check
+bibdesk-rag --paper search "相同組換え修復" --mode semantic
+```
+
+`--index update/rebuild/status/check` manages bibliography, text and enabled
+vectors together. An explicit update migrates schema 1 to 2 while preserving
+existing data; retain a pre-migration SQLite backup because schema-1-only old
+apps cannot read the migrated index. MCP adds `semantic_search_papers` alongside
+`search_papers` and `search_fulltext`.
+
 Update an existing installation:
 
 ```bash
@@ -130,6 +150,9 @@ brew upgrade KentoYana/tap/bibdesk-rag
 bibdesk-rag --version
 brew test KentoYana/tap/bibdesk-rag
 ```
+
+Restart the Codex MCP connection after an upgrade. Normal registration uses the
+stable executable path without arguments and follows the selected configuration.
 
 To stop using BibDesk RAG, remove its MCP registration with
 `codex mcp remove bibdesk-rag` or through the app settings, close active Codex/MCP
