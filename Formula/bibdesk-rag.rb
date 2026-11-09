@@ -3,8 +3,8 @@ class BibdeskRag < Formula
 
   desc "Read-only local literature retrieval for BibDesk libraries"
   homepage "https://github.com/KentoYana/BibDeskRAG"
-  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.4.0/bibdesk_rag-0.4.0.tar.gz"
-  sha256 "ee8f81b9639f506b164adb7b0b51b1457b99c60984c650d59bfdc5fe01d1ef84"
+  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.4.1/bibdesk_rag-0.4.1.tar.gz"
+  sha256 "d3d33ca42eb449d1337899a1f79762dc74e32761e481db6c67f44d12ab93db09"
   license "MIT"
 
   depends_on "pkgconf" => :build
@@ -18,7 +18,7 @@ class BibdeskRag < Formula
   end
 
   resource "build-wheels" do
-    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.4.0/bibdesk-rag-build-wheels.tar.gz"
+    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.4.1/bibdesk-rag-build-wheels.tar.gz"
     sha256 "06f3fac442fe9616e3627641b973088bb0b3eb15f2773ca118ad97f0084eb3f1"
   end
 

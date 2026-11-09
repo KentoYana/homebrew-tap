@@ -101,10 +101,11 @@ brew install KentoYana/tap/bibdesk-rag
 bibdesk-rag --setup
 ```
 
-BibDesk RAG 0.4.0 includes local multilingual title/abstract semantic retrieval.
+BibDesk RAG 0.4.1 includes local multilingual title/abstract semantic retrieval.
 Interactive setup selects your `.bib`, offers semantic retrieval and explicit
 model acquisition, creates or reuses the shared SQLite index, and optionally
 registers the local MCP server in Codex. Keyword retrieval remains the default.
+Model-loading and indexing progress use matching bars on separate lines.
 Existing configuration and index data are retained. For a custom configuration
 location, select it before setup:
 
