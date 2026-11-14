@@ -3,8 +3,8 @@ class BibdeskRag < Formula
 
   desc "Read-only local literature retrieval for BibDesk libraries"
   homepage "https://github.com/KentoYana/BibDeskRAG"
-  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.4.1/bibdesk_rag-0.4.1.tar.gz"
-  sha256 "d3d33ca42eb449d1337899a1f79762dc74e32761e481db6c67f44d12ab93db09"
+  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.5.0/bibdesk_rag-0.5.0.tar.gz"
+  sha256 "2735725aa82a569820f3ea1347b3368707d58d8642bf8f5e7401aa119d7af607"
   license "MIT"
 
   depends_on "pkgconf" => :build
@@ -18,7 +18,7 @@ class BibdeskRag < Formula
   end
 
   resource "build-wheels" do
-    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.4.1/bibdesk-rag-build-wheels.tar.gz"
+    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.5.0/bibdesk-rag-build-wheels.tar.gz"
     sha256 "06f3fac442fe9616e3627641b973088bb0b3eb15f2773ca118ad97f0084eb3f1"
   end
 
@@ -108,6 +108,11 @@ class BibdeskRag < Formula
     sha256 "45222d94ddd511536f3b2f7d9deae3b2339b4ce0f075f1ca25703b07cad9dd21"
   end
 
+  resource "olefile" do
+    url "https://files.pythonhosted.org/packages/69/1b/077b508e3e500e1629d366249c3ccb32f95e50258b231705c09e3c7a4366/olefile-0.47.zip"
+    sha256 "599383381a0bf3dfbd932ca0ca6515acd174ed48870cbf7fee123d698c192c1c"
+  end
+
   resource "openpyxl" do
     url "https://files.pythonhosted.org/packages/3d/f9/88d94a75de065ea32619465d2f77b29a0469500e99012523b91cc4141cd1/openpyxl-3.1.5.tar.gz"
     sha256 "cf0e3cf56142039133628b5acffe8ef0c12bc902d2aadd3e0fe5878dc08d1050"
@@ -167,6 +172,11 @@ class BibdeskRag < Formula
     url "https://files.pythonhosted.org/packages/e3/05/b17359e1cefb4f909b5e40b1b90a496d987258916dbbf88e842c729f510e/urllib3-2.8.0.tar.gz"
     sha256 "63bf2ead4c879426ebf22ef2a781eeb4aa3b4ae798a0435506f8687fd5bb9b63"
   end
+
+  resource "xlrd" do
+    url "https://files.pythonhosted.org/packages/07/5a/377161c2d3538d1990d7af382c79f3b2372e880b65de21b01b1a2b78691e/xlrd-2.0.2.tar.gz"
+    sha256 "08b5e25de58f21ce71dc7db3b3b8106c1fa776f3024c54e45b45b374e89234c9"
+  end
   # END LOCKED RESOURCES
 
   # Runtime inputs are explicit sdists. Allow only the locked, offline backend
@@ -200,7 +210,7 @@ class BibdeskRag < Formula
       ENV.delete("PIP_NO_DEPS")
       system "python3.14", "-m", "pip", "--python", libexec/"bin/python", "check"
     end
-    pkgshare.install "tools/package_smoke.py"
+    pkgshare.install "tools/package_smoke.py", "tools/format_fixtures.py"
   end
 
   def caveats

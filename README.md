@@ -101,7 +101,14 @@ brew install KentoYana/tap/bibdesk-rag
 bibdesk-rag --setup
 ```
 
-BibDesk RAG 0.4.1 includes local multilingual title/abstract semantic retrieval.
+BibDesk RAG 0.5.0 includes local multilingual title/abstract semantic retrieval
+and read-only extraction of DOCX, PPTX, DOC, XLS, TeX, Keynote, Pages and Numbers.
+Legacy DOC/XLS and iWork return partial extraction with explicit limitations;
+images and videos are excluded. Per-file and total container-expansion defaults
+are both 200 MiB; existing explicit settings are preserved on upgrade. See the
+[format scope](https://github.com/KentoYana/BibDeskRAG/blob/main/docs/file-formats.md).
+No-argument usage includes the version, author and terminal colors.
+
 Interactive setup selects your `.bib`, offers semantic retrieval and explicit
 model acquisition, creates or reuses the shared SQLite index, and optionally
 registers the local MCP server in Codex. Keyword retrieval remains the default.
@@ -173,7 +180,7 @@ The [BibDesk RAG Homebrew workflow](.github/workflows/bibdesk-rag.yml) runs on m
 when its Formula or workflow changes, and through **Actions → BibDesk RAG Homebrew
 → Run workflow**. It registers and verifies the checked-out tap commit, checks
 the Formula, installs from source, and runs CLI/MCP retrieval tests using generated
-PDF and CSV fixtures. Tests verify source preservation and PDF page citations;
+PDF, CSV and document fixtures. Tests verify source preservation and detailed citations;
 they do not require a personal library. Logs are retained for 30 days.
 
 ## LiteratureDigest
