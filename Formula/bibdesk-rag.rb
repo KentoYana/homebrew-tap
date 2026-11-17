@@ -3,8 +3,8 @@ class BibdeskRag < Formula
 
   desc "Read-only local literature retrieval for BibDesk libraries"
   homepage "https://github.com/KentoYana/BibDeskRAG"
-  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.6.0/bibdesk_rag-0.6.0.tar.gz"
-  sha256 "2de116269eb4618f4e5bbc22b478c63e78b53d7e5f514af5045e78c154930920"
+  url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.7.0/bibdesk_rag-0.7.0.tar.gz"
+  sha256 "376aaeea51f17a0a47afbcc500106a30c301a01982353d3e7ab9e35a515ccd96"
   license "MIT"
 
   depends_on "pkgconf" => :build
@@ -21,7 +21,7 @@ class BibdeskRag < Formula
   end
 
   resource "build-wheels" do
-    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.6.0/bibdesk-rag-build-wheels.tar.gz"
+    url "https://github.com/KentoYana/BibDeskRAG/releases/download/v0.7.0/bibdesk-rag-build-wheels.tar.gz"
     sha256 "2cb3ffe1613d3ad78d542b7a4864eae960a4bc977d936d9cdb4231ac10195e15"
   end
 
@@ -237,7 +237,8 @@ class BibdeskRag < Formula
       ENV.delete("PIP_NO_DEPS")
       system "python3.14", "-m", "pip", "--python", libexec/"bin/python", "check"
     end
-    pkgshare.install "tools/package_smoke.py", "tools/format_fixtures.py", "tools/pdf_fixtures.py"
+    pkgshare.install "tools/package_smoke.py", "tools/format_fixtures.py",
+                     "tools/pdf_fixtures.py", "tools/similarity_fixture.py"
   end
 
   def caveats
